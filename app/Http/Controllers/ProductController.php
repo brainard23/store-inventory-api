@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\product;
+use App\Models\Products;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -14,7 +14,9 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        $products = Products::all();
+
+        return response()->json($products);
     }
 
     /**
@@ -35,7 +37,22 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $product = Products::where('barcode', $request->barcode)->first();
+
+        if ($product === null) {
+            Products::create([
+                'name' => $request->name,
+                'brand' => $request->brand,
+                'quantity' => $request->quantity,
+                'barcode' => $request->barcode,
+                'price' => $request->price,
+                'description' => $request->description,
+            ]);
+
+            return response()->json('Product created successfully.');
+        } else {
+            return response()->json('Product already exists.');
+        }
     }
 
     /**
@@ -44,7 +61,7 @@ class ProductController extends Controller
      * @param  \App\Models\product  $product
      * @return \Illuminate\Http\Response
      */
-    public function show(product $product)
+    public function show(Products $product)
     {
         //
     }
@@ -55,7 +72,7 @@ class ProductController extends Controller
      * @param  \App\Models\product  $product
      * @return \Illuminate\Http\Response
      */
-    public function edit(product $product)
+    public function edit(Products $product)
     {
         //
     }
@@ -67,7 +84,7 @@ class ProductController extends Controller
      * @param  \App\Models\product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, product $product)
+    public function update(Request $request, Products $product)
     {
         //
     }
@@ -78,7 +95,7 @@ class ProductController extends Controller
      * @param  \App\Models\product  $product
      * @return \Illuminate\Http\Response
      */
-    public function destroy(product $product)
+    public function destroy(Product $product)
     {
         //
     }
